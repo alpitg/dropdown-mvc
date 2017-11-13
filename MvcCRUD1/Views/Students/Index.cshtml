@@ -1,0 +1,204 @@
+﻿@model MvcCRUD1.ViewModels.StudentViewModel
+
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2 class="text-center">Student Data</h2>
+
+
+
+<div class="jumbotron">
+
+    <h2>Create</h2>
+
+    @using (Html.BeginForm("Index", "Students", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <h4>Student</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.Students.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Students.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Students.FirstName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Students.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Students.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Students.LastName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Students.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Students.Email, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Students.Email, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Students.Contact, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Students.Contact, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Students.Contact, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Students.Address, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Students.Address, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Students.Address, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Students.Country, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(m => m.Students.Country,
+              new SelectList(ViewBag.CountryList, "CountryId", "CountryName"),
+              "Select Country",
+              new { @class = "form-control", @onchange = "FillState()" })
+                    @Html.ValidationMessageFor(m => m.Students.Country, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Students.State, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(m => m.Students.State,
+              new SelectList(Enumerable.Empty<SelectListItem>(), "StateId", "StateName"),
+              "Select State",
+              new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Students.State, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Students.City, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Students.City, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Students.City, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Students.PinCode, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Students.PinCode, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Students.PinCode, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+
+                @Html.LabelFor(model => model.Students.ProfileImage, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBox("file", "", new { type = "file" }) <br />
+                    @*<input type="File" name="file" id="file" value="Choose File" />*@
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" id="save" value="Create" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+
+
+<br />
+<br />
+
+
+
+@*Student List*@
+<p><b>Students List</b></p>
+
+<table class="table">
+    <tr>
+        <th>Id</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Contact</th>
+        <th>Address</th>
+        <th>Country</th>
+        <th>State</th>
+        <th>City</th>
+        <th>Pin Code</th>
+    </tr>
+    @foreach (var student in Model.StudentList)
+    {
+        <tr>
+            <td>@student.Id</td>
+            <td>@student.FirstName</td>
+            <td>@student.LastName</td>
+            <td>@student.Email</td>
+            <td>@student.Contact</td>
+            <td>@student.Address</td>
+            <td>@student.Country</td>
+            <td>@student.State</td>
+            <td>@student.City</td>
+            <td>@student.PinCode</td>
+
+
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = student.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = student.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = student.Id })
+            </td>
+
+            <td></td>
+
+        </tr>
+    }
+</table>
+
+
+<script>
+
+    function FillState() {
+        var countryId = $('#Students_Country').val();
+        $.ajax({
+            url: '/Students/FillState',
+            type: "GET",
+            dataType: "JSON",
+            data: { Country: countryId },
+            success: function (states) {
+                $("#Students_State").html(""); // clear before appending new list
+                $.each(states, function (i, state) {
+                    $("#Students_State").append(
+                        $('<option></option>').val(state.StateId).html(state.StateName));
+                });
+            }
+        });
+    }
+
+
+</script>
+
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+    @*@Scripts.Render("~/Scripts/dropdown.js")*@
+
+}
